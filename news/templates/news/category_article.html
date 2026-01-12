@@ -1,0 +1,14 @@
+{% comment %} {% extends 'news/base.html' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+<h2>Articles in {{ category.name }}</h2>
+<ul>
+{% for article in articles %}
+    <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+{% empty %}
+    <li>No articles in this category.</li>
+{% endfor %}
+</ul>
+{% endblock %} {% endcomment %}

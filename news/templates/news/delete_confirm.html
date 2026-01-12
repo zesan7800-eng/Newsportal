@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Delete | NewsPortal</title>
+    <link rel="stylesheet" href="{% static 'news/style.css' %}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .actions a, .actions button {
+            margin-right: 10px;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+        .actions a {
+            background-color: #ccc;
+            color: #000;
+        }
+        .actions button {
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Confirm Delete</h2>
+    <p>Are you sure you want to delete the article: <strong>{{ article.title }}</strong>?</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="actions">
+            <button type="submit">Yes, Delete</button>
+            <a href="{% url 'my_articles' %}">Cancel</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block title %}{{ article.title }} | NewsPortal{% endblock %}
+
+{% block content %}
+
+<style>
+/* =================== ARTICLE DETAIL PAGE =================== */
+.article-container {
+    max-width: 900px;
+    margin: 30px auto;
+    font-family: 'Georgia', serif;
+    color: #111;
+}
+
+.article-container h1 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.article-meta {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.article-container img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.article-container p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+/* =================== RELATED NEWS =================== */
+.related-news {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #ccc;
+}
+
+.related-news h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #222;
+    display: inline-block;
+    padding-bottom: 3px;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.related-card {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.related-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.related-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.related-card h4 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.related-card a {
+    color: #222;
+    text-decoration: none;
+}
+
+.related-card a:hover {
+    color: #f4d03f;
+}
+
+/* =================== RESPONSIVE =================== */
+@media (max-width: 768px) {
+    .article-container {
+        padding: 0 10px;
+    }
+    .article-container h1 {
+        font-size: 1.8rem;
+    }
+    .related-news h3 {
+        font-size: 1.3rem;
+    }
+    .related-card img {
+        height: 100px;
+    }
+}
+</style>
+
+<div class="article-container">
+    <!-- Main Article -->
+    <article>
+        <h1>{{ article.title }}</h1>
+
+        <p class="article-meta">
+            Category:
+            <a href="{% url 'category' article.category.slug %}">
+                {{ article.category.name }}
+            </a>
+            |
+            {{ article.created_at|date:"F d, Y" }}
+        </p>
+
+        {% if article.image %}
+            <img src="{{ article.image.url }}" alt="{{ article.title }}">
+        {% endif %}
+
+        <p>{{ article.content|linebreaks }}</p>
+    </article>
+
+    <!-- Related News -->
+    <div class="related-news">
+        <h3>Related News</h3>
+
+        <div class="related-grid">
+            {% for item in related_articles %}
+            <div class="related-card">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                {% else %}
+                    <img src="{% static 'news/default-thumbnail.jpg' %}" alt="No Image">
+                {% endif %}
+                <h4>
+                    <a href="{{ item.get_absolute_url }}">{{ item.title|truncatechars:50 }}</a>
+                </h4>
+            </div>
+            {% empty %}
+                <p>No related articles.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

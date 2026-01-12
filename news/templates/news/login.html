@@ -1,0 +1,70 @@
+{% extends 'news/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 400px; margin: 50px auto; padding: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-family: Arial, sans-serif;">
+
+    <h2 style="text-align: center; margin-bottom: 25px; color: #222; font-size: 2rem;">Login</h2>
+
+    <form method="post" style="display: flex; flex-direction: column; gap: 15px;">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+            <div style="display:flex; flex-direction:column;">
+                <label for="{{ field.id_for_label }}" style="margin-bottom: 5px; font-weight:bold;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <span style="color: #e74c3c; font-size: 0.9rem;">{{ field.errors|striptags }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" style="padding: 10px; background-color: #222; color: #fff; border:none; border-radius: 5px; cursor:pointer; font-weight:bold; transition: background 0.3s;">
+            Login
+        </button>
+    </form>
+
+    <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
+        Don't have an account? <a href="{% url 'register' %}" style="color: #f4d03f; font-weight:bold;">Register here</a>
+    </p>
+</div>
+
+<style>
+    /* Input styling */
+    input[type=text],
+    input[type=password],
+    input[type=email] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus,
+    input[type=email]:focus {
+        border-color: #f4d03f;
+        box-shadow: 0 0 5px rgba(244, 208, 63, 0.5);
+    }
+
+    button:hover {
+        background-color: #f4d03f;
+        color: #222;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    body {
+        background-color: #f4f4f4;
+    }
+</style>
+
+{% endblock %}

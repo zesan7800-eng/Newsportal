@@ -1,0 +1,36 @@
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block title %}Create Article{% endblock %}
+
+{% block content %}
+
+<h2>Create Article</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div>
+        <label>Title</label><br>
+        {{ form.title }}
+    </div>
+
+    <div>
+        <label>Category</label><br>
+        {{ form.category }}
+    </div>
+
+    <div>
+        <label>Image</label><br>
+        {{ form.image }}
+    </div>
+
+    <div>
+        <label>Content</label><br>
+        {{ form.content }}
+    </div>
+
+    <button type="submit">Publish</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,236 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NewsPortal | Home</title>
+    <link rel="stylesheet" href="{% static 'news/style.css' %}">
+    <style>
+        /* =================== RESET & BASE =================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #fdfdfd;
+            color: #111;
+            padding: 0 20px;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        h2, h3 {
+            margin-bottom: 10px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        /* =================== NAVBAR =================== */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #222;
+            color: #fff;
+            flex-wrap: wrap;
+        }
+        .nav-left, .nav-center, .nav-right {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-left a, .nav-center a, .nav-right a {
+            color: #fff;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding: 5px 0;
+            transition: color 0.3s;
+        }
+        .nav-left a:hover, .nav-center a:hover, .nav-right a:hover {
+            color: #f4d03f;
+        }
+        .nav-left strong {
+            font-size: 1.2rem;
+            margin-right: 20px;
+        }
+        .nav-center {
+            justify-content: center;
+            flex: 1;
+        }
+
+        /* =================== PAGE CONTENT =================== */
+        section {
+            margin-top: 30px;
+        }
+        section h2 {
+            font-size: 1.8rem;
+            border-bottom: 3px solid #222;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* ========== LATEST NEWS ========== */
+        .latest-article {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .latest-article h3 a {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #222;
+            transition: color 0.3s;
+        }
+        .latest-article h3 a:hover {
+            color: #f4d03f;
+        }
+        .latest-article small {
+            color: #555;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .latest-article img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .latest-article p {
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        /* ========== CATEGORY GRID ========== */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .category-grid article {
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .category-grid article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .category-grid article h3 a {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #222;
+        }
+        .category-grid article h3 a:hover {
+            color: #f4d03f;
+        }
+        .category-grid article small {
+            display: block;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .category-grid article img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .category-grid article p {
+            font-size: 0.95rem;
+        }
+
+        /* =================== RESPONSIVE =================== */
+        @media (max-width: 1024px) {
+            .nav-center {
+                justify-content: flex-start;
+                margin: 10px 0;
+            }
+        }
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-left, .nav-center, .nav-right {
+                margin-top: 10px;
+            }
+            .nav-left a, .nav-center a, .nav-right a {
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav>
+    <div class="nav-left">
+        <a href="{% url 'home' %}"><strong>NewsPortal</strong></a>
+    </div>
+
+    <div class="nav-center">
+        {% for cat in categories %}
+            <a href="{% url 'category' cat.slug %}">{{ cat.name }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="nav-right">
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_articles' %}">My Articles</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+</nav>
+
+<hr>
+
+<!-- ===== LATEST ARTICLE ===== -->
+{% if latest_news %}
+    <div class="latest-article">
+        <h3><a href="{{ latest_news.0.get_absolute_url }}">{{ latest_news.0.title }}</a></h3>
+        <small>{{ latest_news.0.created_at|date:"F d, Y" }} | {{ latest_news.0.category.name }}</small>
+        {% if latest_news.0.image %}
+            <img src="{{ latest_news.0.image.url }}" alt="{{ latest_news.0.title }}">
+        {% endif %}
+        <p>{{ latest_news.0.content|truncatewords:50 }}</p>
+    </div>
+{% endif %}
+
+<!-- ===== REST OF ARTICLES IN GRID ===== -->
+{% for category, articles in category_sections.items %}
+    <section>
+        <h2>{{ category.name }}</h2>
+        <div class="category-grid">
+            {% for item in articles %}
+                <article>
+                    <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                    <small>{{ item.created_at|date:"M d, Y" }}</small>
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                    {% endif %}
+                    <p>{{ item.content|truncatewords:25 }}</p>
+                </article>
+            {% empty %}
+                <p>No articles in this category.</p>
+            {% endfor %}
+        </div>
+        <p><a href="{% url 'category' category.slug %}">View all {{ category.name }} →</a></p>
+    </section>
+{% endfor %}
+
+</body>
+</html>

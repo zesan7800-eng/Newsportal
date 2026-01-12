@@ -1,0 +1,38 @@
+{% extends 'news/base.html' %}
+
+{% block title %}{{ category.name }} | NewsPortal{% endblock %}
+
+{% block content %}
+
+<h2>{{ category.name }}</h2>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+    {% for article in articles %}
+        <article style="border:1px solid #eee; padding:15px; border-radius:5px; background-color:#fff; transition:transform 0.2s, box-shadow 0.2s;">
+            
+            {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" style="width:100%; height:auto; border-radius:5px; margin-bottom:10px;">
+            {% endif %}
+            
+            <h3 style="margin-bottom:5px;">
+                <a href="{{ article.get_absolute_url }}" style="text-decoration:none; color:#222; font-weight:bold;">
+                    {{ article.title }}
+                </a>
+            </h3>
+            
+            <small style="color:#666; font-style:italic; margin-bottom:10px; display:block;">
+                {{ article.created_at|date:"F d, Y" }}
+            </small>
+            
+            <p style="margin-top:5px; color:#333;">
+                {{ article.content|truncatewords:30 }}
+            </p>
+        </article>
+    {% empty %}
+        <p>No articles found in this category.</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

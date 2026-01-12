@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #fdfdfd;
+            color: #111;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #222;
+            color: #fff;
+            flex-wrap: wrap;
+        }
+        header h1 a {
+            font-size: 1.8rem;
+            color: #fff;
+            font-weight: bold;
+        }
+        header h1 a:hover {
+            color: #f4d03f;
+        }
+
+        /* ===== CATEGORY NAVIGATION ===== */
+        nav {
+            display: flex;
+            justify-content: center;
+            flex: 1;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        nav a {
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #f4d03f;
+        }
+
+        /* ===== USER LINKS ===== */
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-links a {
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .user-links a:hover {
+            color: #f4d03f;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: #222;
+            color: #fff;
+            padding: 30px 20px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        footer .footer-left,
+        footer .footer-center,
+        footer .footer-right {
+            flex: 1;
+            margin: 10px;
+        }
+        footer h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #f4d03f;
+        }
+        footer a {
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: #f4d03f;
+        }
+        footer p {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #bbb;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .nav-center {
+                justify-content: flex-start;
+                margin: 10px 0;
+            }
+        }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            nav {
+                justify-content: flex-start;
+                margin: 10px 0;
+            }
+            .user-links {
+                margin-top: 10px;
+            }
+            footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <!-- Site Title -->
+    <h1><a href="{% url 'home' %}">NewsPortal</a></h1>
+
+    <!-- Category Navigation -->
+    <nav>
+        {% for cat in categories %}
+            <a href="{% url 'category' cat.slug %}">{{ cat.name }}</a>
+        {% endfor %}
+    </nav>
+
+    <!-- User Links -->
+    <div class="user-links">
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_articles' %}">My Articles</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+</header>
+
+<hr>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<hr>
+
+<footer>
+    <div class="footer-left">
+        <h4>About NewsPortal</h4>
+        <p>Your trusted source for the latest news, articles, and insights from around the world.</p>
+    </div>
+
+    <div class="footer-center">
+        <h4>Quick Links</h4>
+        <a href="{% url 'home' %}">Home</a>
+        {% for cat in categories %}
+            <a href="{% url 'category' cat.slug %}">{{ cat.name }}</a>
+        {% endfor %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+    </div>
+
+    <div class="footer-right">
+        <h4>Contact Us</h4>
+        <p>Email: info@newsportal.com</p>
+        <p>Phone: +880 123 456 789</p>
+        <p>Address: Dhaka, Bangladesh</p>
+    </div>
+
+    <p style="flex-basis: 100%; text-align: center; margin-top: 15px;">© 2026 NewsPortal. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
